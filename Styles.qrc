@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/release">
+        <file>darkstyle/legend.png</file>
+    </qresource>
+</RCC>
