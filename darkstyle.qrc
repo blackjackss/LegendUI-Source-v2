@@ -60,5 +60,6 @@
         <file>darkstyle/zulu.png</file>
         <file>darkstyle/LGND.png</file>
         <file>darkstyle/login_2.gif</file>
+        <file>darkstyle/lgns.png</file>
     </qresource>
 </RCC>

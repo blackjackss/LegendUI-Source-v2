@@ -84,6 +84,8 @@ private:
  void LCAuth(QString username, QString password);
  void WriteRemember(QString username, QString password);
  void ReadRemember();
+ void FindRandUser(int group);
+ void closeEvent(QCloseEvent *event);
  QString ExceptionVerify(QString data);
  QString ReadLine(int count);
  QString ReadLine2(int count);

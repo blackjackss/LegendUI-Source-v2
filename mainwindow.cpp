@@ -15,6 +15,30 @@
 #include <QRegExp>
 #include <QRegularExpressionMatch>
 #include <QRegularExpression>
+#include <QCloseEvent>
+#include <QFile>
+
+void MainWindow::closeEvent (QCloseEvent *event)
+{
+
+   /* QFile avatarpng("C:\Windows\Temp\avatar.png");
+    QFile avatarjpg("C:\Windows\Temp\avatar.jpg");
+    QFile avatargif("C:\Windows\Temp\avatar.gif");
+
+    QFile bannerpng("C:\Windows\Temp\banner.png");
+    QFile bannergif("C:\Windows\Temp\banner.gif");
+    QFile bannerjpg("C:\Windows\Temp\banner.jpg");
+
+    QFile::remove(avatarpng);
+    QFile::remove(avatarjpg);
+    QFile::remove(avatargif);
+
+    QFile::remove(bannerpng);
+    QFile::remove(bannergif);
+    QFile::remove(bannerjpg);*/
+
+    event->accept();
+}
 
 #pragma comment (lib,"urlmon.lib")
 
@@ -36,9 +60,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 
-  QMovie *pp = new QMovie(XorStr(":/darkstyle/1.gif"));
-  ui->pp->setMovie(pp);
-  pp->start();
+  //QMovie *pp = new QMovie(XorStr(":/darkstyle/1.gif"));
+  //ui->pp->setMovie(pp);
+ // pp->start();
 
   QFontDatabase::addApplicationFont(XorStr(":fonts/Roboto/Roboto-Bold.ttf"));
   QFontDatabase::addApplicationFont(XorStr(":fonts/Roboto/Roboto.ttf"));
@@ -46,6 +70,16 @@ MainWindow::MainWindow(QWidget *parent)
   {
        Messagebox(XorStr("LegendUI Beta Security"),XorStr("Font cannot be loaded !"));
  }
+  QFontDatabase::addApplicationFont(XorStr(":/darkstyle/FontAwesomeR.otf"));
+ if (QFontDatabase::addApplicationFont(XorStr(":/darkstyle/FontAwesomeR.otf")) < 0)
+  {
+      Messagebox(XorStr("LegendUI Security"),XorStr("FontAwesome cannot be loaded !"));
+  }
+ QFontDatabase::addApplicationFont(XorStr(":/darkstyle/FontAwesomeS.otf"));
+  if (QFontDatabase::addApplicationFont(XorStr(":/darkstyle/FontAwesomeS.otf")) < 0)
+  {
+     Messagebox(XorStr("LegendUI Security"),XorStr("FontAwesome cannot be loaded !"));
+  }
 
  ui->UITabBar->tabBar()->hide();
  ui->nav_bar_tabw->tabBar()->hide();
@@ -53,7 +87,9 @@ MainWindow::MainWindow(QWidget *parent)
  ui->label_19->hide();
  ui->label_22->hide();
 
- ReadLCPG(DownloadString(XorStr("http://cdn.legendaryauth.cf/cheats.json")));
+
+
+ ReadLCPG(Decrypt(DownloadString(XorStr("http://cdn.legendaryauth.cf/cheats.json"))));
  ReadRemember();
  LoadLoginBG();
 
@@ -145,7 +181,7 @@ void MainWindow::ReadLCPG(QString data)
 
 void MainWindow::GetCheats(QString isim)
 {
-    QString apiGet = DownloadString(XorStr("http://cdn.legendaryauth.cf/api.php?security=FUS85-MH-3D4JG-LC-38KD&isim=") + isim);
+    QString apiGet = Decrypt(DownloadString(XorStr("http://cdn.legendaryauth.cf/api.php?security=FUS85-MH-3D4JG-LC-38KD&isim=") + isim));
 
     //Messagebox("LC", apiGet);
 
@@ -188,7 +224,9 @@ void MainWindow::GetCheats(QString isim)
 
     if(status != XorStr("Undetected"))
     {
+        if(!User::Admin){
         ui->status_karartma->show();
+        }
     }
     else
     {
@@ -594,6 +632,58 @@ void MainWindow::ReadRemember()
     }
 }
 
+void MainWindow::FindRandUser(int group){
+    QFont fontA;
+    fontA.setFamily(XorStr("FontAwesome"));
+    fontA.setPixelSize(13);
+    ui->rank_logo->setFont(fontA);
+
+
+    if(group == 2){
+        ui->rank_label->setText(XorStr("Pasif Üye"));
+            ui->rank_label->setStyleSheet(XorStr("padding: 1px 6px;text-align: center;color: #fafafa;     background: #7D7D7D;     border-color: #3a4558;     border-color: transparent; border-radius:2px;"));
+        ui->rank_logo->setStyleSheet(XorStr("background-color: rgba(255, 255, 255, 0);"));
+        ui->rank_logo->setText(QChar(0xf406));
+        ui->label_2->setStyleSheet(XorStr("background-color: rgba(255, 255, 255, 0);"));
+    }else if(group == 6){
+        ui->rank_label->setText(XorStr("Aktif Üye"));
+            ui->rank_label->setStyleSheet(XorStr("padding: 1px 6px;text-align: center;color: #fafafa;     background: #2577b1;     border-color: #3a4558;     border-color: transparent; border-radius:2px;"));
+        ui->rank_logo->setStyleSheet(XorStr("background-color: rgba(255, 255, 255, 0);"));
+        ui->rank_logo->setText(QChar(0xf406));
+        ui->label_2->setStyleSheet(XorStr("background-color: rgba(255, 255, 255, 0);"));
+    }else if(group == 7){
+        ui->rank_label->setText(XorStr("Onaylı Üye"));
+            ui->rank_label->setStyleSheet(XorStr("padding: 1px 6px;text-align: center;color: #fafafa;     background: #2577b1;     border-color: #3a4558;     border-color: transparent; border-radius:2px;"));
+        ui->rank_logo->setStyleSheet(XorStr("background-color: rgba(255, 255, 255, 0);"));
+        ui->rank_logo->setText(QChar(0xf406));
+        ui->label_2->setStyleSheet(XorStr("color: #2577b1; border-radius:none; background-color: rgba(255, 255, 255, 0);"));
+    }else if(group == 8){
+        ui->rank_label->setText(XorStr("Süper Üye"));
+  ui->rank_label->setStyleSheet(XorStr("padding: 1px 6px;text-align: center;color: #fafafa;     background: #867c39;     border-color: #3a4558;     border-color: transparent; border-radius:2px;"));
+        ui->rank_logo->setStyleSheet(XorStr("background-color: rgba(255, 255, 255, 0);"));
+   ui->rank_logo->setText(QChar(0xf406));
+        ui->label_2->setStyleSheet(XorStr("color: #867c39; border-radius:none; background-color: rgba(255, 255, 255, 0);"));
+    }else if(group == 9){
+        ui->rank_label->setText(XorStr("Ultra Üye"));
+ui->rank_label->setStyleSheet(XorStr("padding: 1px 6px;text-align: center;color: #fafafa;     background: #9224A4;     border-color: #3a4558;     border-color: transparent; border-radius:2px;"));
+        ui->rank_logo->setStyleSheet(XorStr("background-color: rgba(255, 255, 255, 0);"));
+ ui->rank_logo->setText(QChar(0xf406));
+        ui->label_2->setStyleSheet(XorStr("color: #9c27b0; border-radius:none; background-color: rgba(255, 255, 255, 0);"));
+    }else if(group == 10){
+        ui->rank_label->setText(XorStr("Efsane Üye"));
+            ui->rank_label->setStyleSheet(XorStr("padding: 1px 6px;text-align: center;color: #fafafa;     background: #00c4c3;     border-color: #3a4558;     border-color: transparent; border-radius:2px;"));
+        ui->rank_logo->setStyleSheet(XorStr("background-color: rgba(255, 255, 255, 0);"));
+        ui->rank_logo->setText(QChar(0xf005));
+        ui->label_2->setStyleSheet(XorStr("color: #00c4c3; border-radius:none; background-color: rgba(255, 255, 255, 0);"));
+    }else if(group == 3){
+        ui->rank_label->setText(XorStr("Founder"));
+        ui->rank_label->setStyleSheet(XorStr("padding: 1px 6px;text-align: center;color: #fafafa;     background: #8e0000;     border-color: #3a4558;     border-color: transparent; border-radius:2px;"));
+        ui->rank_logo->setStyleSheet(XorStr("background-color: rgba(255, 255, 255, 0);"));
+        ui->rank_logo->setText(QChar(0xf521));
+        ui->label_2->setStyleSheet(XorStr("color: #FF0000; border-radius:none; background-color: rgba(255, 255, 255, 0);"));
+    }
+}
+
 void MainWindow::on_login_clicked()
 {
     QString username = ui->username->text();
@@ -606,7 +696,7 @@ void MainWindow::on_login_clicked()
 
     rapidjson::Document auth;
     auth.Parse(data.toUtf8());
-    //Messagebox("LC",data);
+    Messagebox("LC",data);
 
     bool sucess = auth[XorStr("success")].GetBool();
     bool admin = auth[XorStr("user")][XorStr("is_admin")].GetBool();
@@ -615,8 +705,10 @@ void MainWindow::on_login_clicked()
     QString avatar = auth[XorStr("user")][XorStr("avatar_urls")][XorStr("l")].GetString();
     QString banner = auth[XorStr("user")][XorStr("profile_banner_urls")][XorStr("l")].GetString();
     int message = auth[XorStr("user")][XorStr("message_count")].GetInt();
+    int group = auth[XorStr("user")][XorStr("user_group_id")].GetInt();
     int reaction = auth[XorStr("user")][XorStr("vote_score")].GetInt();
     int vote = auth[XorStr("user")][XorStr("reaction_score")].GetInt();
+
 
 
     if(Regex(avatar) == XorStr(".gif")){
@@ -649,7 +741,9 @@ void MainWindow::on_login_clicked()
             //// Banlı değil ise yapılacaklar
 
             User::is_loggin = true;
+            User::Admin = admin;
             WriteRemember(username,password);
+            FindRandUser(group);;
 
 
 
@@ -659,9 +753,14 @@ void MainWindow::on_login_clicked()
             //Messagebox("Lc",avatar);
             //Messagebox("LC",banner);
             URLDownloadToFileA(NULL,banner.toUtf8(),profileData.toUtf8(),0,NULL);
-
+            if(avatar != "")
+            {
             ui->pp->setMovie(avatarM);
             avatarM->start();
+            }
+            else{
+                ui->pp->setPixmap(QPixmap(XorStr(":/darkstyle/lgns.png")));
+            }
             ui->label->setMovie(bannerM);
             bannerM->start();
             //ui->label->setPixmap(QPixmap("C:/Windows/Temp/banner.png"));
@@ -675,7 +774,7 @@ void MainWindow::on_login_clicked()
             ui->label_9->setText(QString::number(reaction));
             ui->label_11->setText(QString::number(vote));
 
-            if(admin == true){ui->label_3->show(); ui->label_2->setStyleSheet(XorStr("color: #FF0000; border-radius:none; background-color: rgba(255, 255, 255, 0);"));}else if(admin == false){ui->label_3->hide(); ui->label_2->setStyleSheet(XorStr(""));}
+            if(admin == true){ ui->label_2->setStyleSheet(XorStr("color: #FF0000; border-radius:none; background-color: rgba(255, 255, 255, 0);"));}else if(admin == false){ }
 
             SelectTab(2);
             SelectTab(3);
@@ -815,10 +914,13 @@ void MainWindow::on_start_button_clicked()
     QString path = XorStr("C:\\Windows\\Provisioning\\inject-api.exe");
     try{
         ui->progressBar->setMaximum(0);
-        URLDownloadToFileA(NULL,downloadURL.toUtf8(),path.toUtf8(),0,NULL);
+        URLDownloadToFileA(NULL,downloadURL.toUtf8(),path.toLatin1(),0,NULL);
         ui->progressBar->setMaximum(100);
-        QProcess *process = new QProcess(this);
-        process->start(path, QStringList() << "");
+        system("start "+path.toLatin1()+ " & exit");
+        Sleep(1500);
+        ExitProcess(-1);
+        /*QProcess *process = new QProcess(this);
+        process->start(path, QStringList() << "");*/
 
     }catch(QException &exsdc){
         Messagebox(XorStr("LegendUI Security"),XorStr("Bilinmiyen bir hata meydana geldi!"));

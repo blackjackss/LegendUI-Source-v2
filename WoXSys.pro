@@ -173,6 +173,8 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/curl/ -llibcurl.dlld
 else:unix: LIBS += -L$$PWD/curl/ -llibcurl.dll
 DEFINES += CURL_STATICLIB
 
+QMAKE_LFLAGS += /MANIFESTUAC:"level='requireAdministrator'uiAccess='false'"
+
 win32 {
  QMAKE_POST_LINK += mt -nologo -manifest $$PWD/manifest.xml -outputresource:$$OUT_PWD/$$TARGET”.exe” $$escape_expand(\n\t)
 }

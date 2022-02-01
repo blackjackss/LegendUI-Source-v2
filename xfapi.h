@@ -122,7 +122,7 @@ std::string Discet()
 }
 
 
-QString FindRankCSS(QString rankkey)
+QString FindRankCSS(int group)
 {
 return 0;
 }
